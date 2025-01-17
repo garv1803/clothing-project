@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="cart.html">Cart</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search for products..." />
+    </div>
+
+    <!-- Shop Section -->
+    <div class="shop-container">
+        <h2>Our Products</h2>
+        <div class="product-grid" id="product-grid">
+            <!-- Product Items -->
+            <div class="product-item" data-name="Men's Casual Shirt">
+                <img src="images/product1.jpg" alt="Men's casual shirt" class="product-img">
+                <h3>Men's Casual Shirt</h3>
+                <p class="product-price">₹1,499</p>
+                <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+            <div class="product-item" data-name="Kurti">
+                <img src="images/product2.jpg" alt="Kurti" class="product-img">
+                <h3>Kurti</h3>
+                <p class="product-price">₹799</p>
+                <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+            <div class="product-item" data-name="Kids T-Shirt">
+                <img src="images/product3.jpg" alt="Kids T-shirt" class="product-img">
+                <h3>Kids T-Shirt</h3>
+                <p class="product-price">₹1,099</p>
+                <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+             <!-- Product 4 -->
+             <div class="product-item" data-name="Men's Denim Jeans">
+                <img src="images/product4.jpg" alt="Men's denim jeans" class="product-img">
+                <h3>Men's Denim Jeans</h3>
+                <p class="product-price">₹899</p>
+                <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+            <!-- Product 5 -->
+            <div class="product-item" data-name="Cotton Saree">
+                <img src="images/product5.jpg" alt="Cotton Saree" class="product-img">
+                <h3>Cotton Saree</h3>
+                <p class="product-price">₹1,799</p>
+                <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+            <!-- Product 6 -->
+            <div class="product-item" data-name="Men's blazer">
+                <img src="images/product6.jpg" alt="Men's blazer" class="product-img">
+                <h3>Men's Blazer</h3>
+                <p class="product-price">₹2,499</p>
+                <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+            <!-- Product 7 -->
+            <div class="product-item" data-name="Kids Jacket">
+                <img src="images/product7.jpg" alt="Kids Jacket" class="product-img">
+                <h3>Kids Jacket</h3>
+                <p class="product-price">₹1,299</p>
+                <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+            <!-- Product 8 -->
+            <div class="product-item" data-name="Women's Handbag">
+                <img src="images/product8.jpg" alt="Women's handbag" class="product-img">
+                <h3>Women's Handbag</h3>
+                <p class="product-price">₹1,099</p>
+                <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+            <!-- Product 9 -->
+            <div class="product-item" data-name="Men's Sports Shoes">
+                <img src="images/product9.jpg" alt="Men's Sports Shoes" class="product-img">
+                <h3>Men's Sports Shoes</h3>
+                <p class="product-price">₹1,499</p>
+                <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+            <!-- Product 10 -->
+            <div class="product-item" data-name="Women's Sandal">
+                <img src="images/product10.jpg" alt="Women's Sandal" class="product-img">
+                <h3>Women's Sandal</h3>
+                <p class="product-price">₹999</p>
+                <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+            <!-- Add more products as needed -->
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Utility functions for cart management
+        
+
+function getCart() {
+    return JSON.parse(localStorage.getItem('cart')) || []; // Changed key from 'cartItems' to 'cart'
+}
+
+function setCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart)); // Changed key from 'cartItems' to 'cart'
+}
+
+
+       // Add to Cart functionality
+document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const productItem = button.closest('.product-item');
+        const productName = productItem.querySelector('h3').innerText;
+        const productImage = productItem.querySelector('img').src;
+        
+        // Parse the price correctly
+        const productPriceText = productItem.querySelector('.product-price').innerText;
+        const productPrice = parseFloat(productPriceText.replace(/[₹,]/g, '').trim()); // Remove currency symbol and commas
+
+        const cart = getCart();
+        const existingProductIndex = cart.findIndex(item => item.name === productName);
+
+        if (existingProductIndex > -1) {
+            // If the product is already in the cart, increase the quantity
+            cart[existingProductIndex].quantity++;
+        } else {
+            // Otherwise, add a new product to the cart
+            cart.push({ name: productName, image: productImage, price: productPrice, quantity: 1 });
+        }
+
+        setCart(cart); // Save the updated cart to localStorage
+        alert(`${productName} added to cart!`);
+    });
+});
+
+
+        // Search functionality
+        const searchInput = document.getElementById('search-input');
+        const productItems = document.querySelectorAll('.product-item');
+
+        searchInput.addEventListener('input', function () {
+            const query = searchInput.value.toLowerCase();
+
+            productItems.forEach(item => {
+                const productName = item.getAttribute('data-name').toLowerCase();
+                item.style.display = productName.includes(query) ? 'block' : 'none';
+            });
+        });
+    </script>
+
+    <style>
+        .search-bar {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        #search-input {
+            width: 50%;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .product-item {
+            text-align: center;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .product-item img {
+            width: 100%;
+            height: auto;
+        }
+
+        .product-price {
+            color: #555;
+        }
+
+        .add-to-cart-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</body>
+</html>

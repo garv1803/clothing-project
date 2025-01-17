@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="cart.html">Cart</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+    </div>
+
+    <!-- Cart Section -->
+    <div class="cart-section" id="cartSection">
+        <h2>Your Cart</h2>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody id="cartItems">
+                <!-- Cart items will be dynamically inserted here -->
+            </tbody>
+        </table>
+
+        <div class="cart-total" id="cartSummary">
+            <div class="total-label">Total:</div>
+            <div class="total-price" id="cartTotal">₹0.00</div>
+            <button class="cart-checkout-btn" id="checkoutButton">Proceed to Checkout</button>
+        </div>
+
+        <div id="emptyCartMessage" style="display: none; text-align: center; margin-top: 20px;">
+            <p>Your cart is empty!</p>
+            <a href="shop.html" class="return-shop-btn">Continue Shopping</a>
+        </div>
+    </div>
+
+    <!-- Checkout Section -->
+    <div class="checkout-section" id="checkoutSection" style="display: none;">
+        <h2>Checkout</h2>
+        <form id="checkoutForm" method="POST" action="process_order.php">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Delivery Address:</label>
+                <textarea id="address" name="address" placeholder="Enter your delivery address" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="payment">Payment Option:</label>
+                <select id="payment" name="payment" onchange="togglePaymentFields()" required>
+                    <option value="COD">Cash On Delivery</option>
+                    <option value="card">Credit/Debit/ATM Card</option>
+                    <option value="upi">UPI</option>
+                </select>
+            </div>
+            <!-- Card Details -->
+            <div id="cardDetails" style="display: none;">
+                <div class="form-group">
+                    <label for="cardNumber">Card Number:</label>
+                    <input type="text" id="cardNumber" name="cardNumber" placeholder="Enter your card number">
+                </div>
+                <div class="form-group">
+                    <label for="expiry">Expiry Date:</label>
+                    <input type="text" id="expiry" name="expiry" placeholder="MM/YY">
+                </div>
+                <div class="form-group">
+                    <label for="cvv">CVV:</label>
+                    <input type="password" id="cvv" name="cvv" placeholder="Enter CVV">
+                </div>
+            </div>
+            <!-- UPI Details -->
+            <div id="upiDetails" style="display: none;">
+                <div class="form-group">
+                    <label for="upiId">UPI ID:</label>
+                    <input type="text" id="upiId" name="upiId" placeholder="Enter your UPI ID">
+                </div>
+            </div>
+            <button type="submit" class="btn-primary">Place Order</button>
+        </form>
+    </div>
+
+    <script src="cart.js" defer></script>
+</body>
+</html>

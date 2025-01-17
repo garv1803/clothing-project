@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="cart.html">Cart</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+    </div>
+
+   <!-- Login Form -->
+<div class="form-container">
+    <h2>Login</h2>
+    <form action="login.php" method="POST">
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        <button type="submit" class="form-btn">Login</button>
+    </form>
+    <p id="loginMessage"></p>
+</div>
+
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const loginMessage = document.getElementById('loginMessage');
+
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Get user data from localStorage
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            if (user && user.email === email && user.password === password) {
+                loginMessage.textContent = 'Login successful!';
+                loginMessage.style.color = 'green';
+
+                // Redirect to shop page
+                setTimeout(() => {
+                    window.location.href = 'shop.html';
+                }, 1500);
+            } else {
+                loginMessage.textContent = 'Invalid credentials!';
+                loginMessage.style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>
