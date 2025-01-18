@@ -122,6 +122,13 @@ document.getElementById("checkoutForm").addEventListener("submit", function (eve
             method: "upi",
             upiId,
         };
+        
+    }
+    else{
+        paymentDetails = {
+            method: "COD"
+            
+        };
     }
 
     // Customer details
