@@ -91,8 +91,10 @@ document.getElementById("checkoutButton").addEventListener("click", function () 
 // Checkout Form Submission
 document.getElementById("checkoutForm").addEventListener("submit", function (event) {
     event.preventDefault();
-
+    //alert("started 94");
     const payment = document.getElementById("payment").value;
+    let paymentDetails = {};
+
     if (payment === "card") {
         const cardNumber = document.getElementById("cardNumber").value;
         const expiry = document.getElementById("expiry").value;
@@ -102,18 +104,88 @@ document.getElementById("checkoutForm").addEventListener("submit", function (eve
             alert("Please fill in all card details.");
             return;
         }
+        //alert("card detais taken");
+        paymentDetails = {
+            method: "card",
+            cardNumber,
+            expiry,
+            cvv,
+        };
     } else if (payment === "upi") {
         const upiId = document.getElementById("upiId").value;
         if (!upiId) {
             alert("Please enter your UPI ID.");
             return;
         }
+
+        paymentDetails = {
+            method: "upi",
+            upiId,
+        };
     }
 
-    alert("Order placed successfully!");
-    localStorage.removeItem("cart");
-    window.location.href = "index.html";
+    // Customer details
+    const customer = {
+        name: document.getElementById("name").value,
+        //email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        address: document.getElementById("address").value,
+    };
+    //alert("customer details taken")
+
+    //if (!customer.name || !customer.email || !customer.phone || !customer.address) {
+    if (!customer.name || !customer.phone || !customer.address) {
+        alert("Please fill in all customer details.");
+        return;
+    }
+
+    // Retrieve the cart data
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+    }
+
+    const totalAmount = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+    //alert("before php code");
+    // Send data to the server
+    fetch("checkout.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            cart,
+            totalAmount,
+            paymentDetails,
+            customer,
+        }),
+    })
+        .then((response) => response.json())
+        // .then((response) => {
+        //     console.log("Fetch response received:", response);
+        //     //alert(response);
+        //     if (!response.ok) {
+        //         throw new Error(`HTTP error! Status: ${response.status}`);
+        //     }
+        //     return response.json();
+        // })
+        .then((data) => {
+            // alert("are we here?")
+            if (data.status === "success") {
+                alert("Order placed successfully!");
+                localStorage.removeItem("cart");
+                window.location.href = "index.html";
+            } else {
+                alert("Failed to place order: " + data.message);
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred while placing your order.");
+        });
 });
+
 
 // Initialize Cart
 window.onload = loadCart;
